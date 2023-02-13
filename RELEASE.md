@@ -35,7 +35,13 @@
 ## Breaking Changes
 
 *   `Placeholder` (and `_PlaceholderOperator`) are no longer `Jsonable`.
+*   `Placeholder` and all subclasses have been moved to other modules, their
+    structure has been changed and they're now immutable. Most users won't care
+    (the main public-facing API is unchanged and behaves the same way). If you
+    do special operations like `isinstance()` or some kind of custom
+    serialization on placeholders, you will have to update your code.
 *   Optimize MLMD register type to one call in most time instead of two calls.
+
 
 ### For Pipeline Authors
 
@@ -90,7 +96,9 @@
 *   Dummy channel for testing can be constructed by
     `tfx.testing.Channel(artifact_type)`.
 *   `placeholder.Placeholder.placeholders_involved()` was replaced with
-    `placeholder.Placeholder.traverse()`.
+    `placeholder.Placeholder.traverse()`. Also, this function now returns more
+    items than before, namely also placeholder operators like `_ConcatOperator`,
+    which is the implementation of Python's `+` operator.
 *   `placeholder.Predicate.dependent_channels()` was replaced with
     `channel_utils.get_dependent_channels(Placeholder)`.
 *   `placeholder.Predicate.encode_with_keys(...)` was replaced with
